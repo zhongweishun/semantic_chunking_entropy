@@ -35,6 +35,8 @@ python validate.py --results
 tables to `results/`. Run all commands from the checkout root. Dependencies
 are pinned to the tested versions. Data are read directly from the archives;
 ordinary Git is sufficient, with no Git LFS or separate download step.
+[`requirements-lock.txt`](requirements-lock.txt) records the full dependency
+snapshot, including transitive packages, from the clean Python 3.11 install.
 
 To rebuild one figure or write outputs elsewhere:
 
@@ -157,6 +159,7 @@ settings and level counts are saved in `results/figure5abcd.json`.
 | [`src/hierarchical_chunker_utilities_LlamaDS_25Nov2025.py`](src/hierarchical_chunker_utilities_LlamaDS_25Nov2025.py) | Preserved November 25, 2025 semantic chunker |
 | [`chunk_text.py`](chunk_text.py) | Small command-line wrapper for the Nov25 chunker |
 | [`validate.py`](validate.py), [`tests/test_analysis.py`](tests/test_analysis.py) | Dataset integrity and numerical correctness checks |
+| [`requirements.txt`](requirements.txt), [`requirements-lock.txt`](requirements-lock.txt), [`requirements-chunker.txt`](requirements-chunker.txt) | Offline analysis dependencies, complete tested environment, and optional model dependencies |
 | [`figures/`](figures/), [`results/`](results/) | Rebuilt PNG/PDF figures and numerical outputs |
 | [`docs/METHODS.md`](docs/METHODS.md) | Equations, stopping conventions, normalization and numerical validation |
 
@@ -202,6 +205,8 @@ The implementation forms dense matrices; `N=2500` needs several hundred MB of
 working memory. Small-`N` comparison against the original reference utilities
 is included in the numerical checks. The entropy recurrence used by Figures
 1b and 3a is separate and uses only linear memory.
+The full `N=2500`, `K=4`, level 2–11 cache was also regenerated and matched the
+supplied final-length distributions exactly in the reference environment.
 
 ## Generate new trees with the Nov25 chunker
 
