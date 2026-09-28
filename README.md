@@ -55,7 +55,7 @@ explicit seed; the empirical panels use the bundled, fixed observations.
 
 | Main-text panels | Plotting file | Inputs and numerical output | Command |
 |---|---|---|---|
-| Figure 1a | [`analysis/figure1.py`](analysis/figure1.py) | 1,000-story cumulative-surprisal cache; pooled fit in `results/figure1.json` | `python reproduce.py --figure 1` |
+| Figure 1a | [`analysis/figure1.py`](analysis/figure1.py) | 925-story paired cumulative-surprisal cache; pooled fit in `results/figure1.json` | `python reproduce.py --figure 1` |
 | Figure 1b | [`analysis/rtm.py`](analysis/rtm.py), [`analysis/figure1.py`](analysis/figure1.py) | RTM entropy recurrence at `N=5000`, `K=2,...,9` | Same command |
 | Figure 1c | [`analysis/figure1.py`](analysis/figure1.py) | Fixed illustrative tree for “The quick brown fox jumps over the lazy dog.” | Same command |
 | Figure 2b | [`analysis/figure2.py`](analysis/figure2.py) | 925 trees, saved histogram windows, `K=4` theory at `N=2500`; `results/figure2b.json` | `python reproduce.py --figure 2` |
@@ -68,12 +68,18 @@ explicit seed; the empirical panels use the bundled, fixed observations.
 
 ![Figure 1: cumulative surprisal, RTM entropy and illustrative tree](figures/figure1_entropy.png)
 
-Panel (a) uses all **1,000 cached surprisal traces** in
-`data/llm_entropy_reddit1000.json.gz`. Ordinary least squares over all available
-`(token index, cumulative surprisal)` pairs gives **slope 2.546096 nats/token**
-and **R² = 0.971774**. Token indices start at zero, matching the source analysis.
-This pooled fit is a different statistic from the mean of the per-story slopes
-used in Figure 3. Long stories contribute more observations to the pooled fit.
+Panel (a) uses the **925 cached surprisal traces paired with the semantic-tree
+archive** in `data/llm_entropy_reddit925.json.gz`. The plotting code checks every
+story ID against the tree manifest. Ordinary least squares over all **629,230**
+`(token index, cumulative surprisal)` pairs gives **slope 2.556036 nats/token**,
+**intercept 112.514046 nats**, and **R² = 0.972546**. Token indices start at one,
+as in the supplied cumulative-information plotting function. The blue
+dash-dotted fit and red dashed theory line share the fitted intercept.
+This pooled fit differs from the mean of the per-story slopes in Figure 3:
+long stories contribute more observations to the pooled fit.
+
+The same command also creates the standalone replacement panel
+[`figure1a_entropy_925.pdf`](figures/figure1a_entropy_925.pdf).
 
 Panel (b) computes `H(N)/N` at `N=5000` using the exact finite-size recurrence
 described in [Methods](docs/METHODS.md). The plotted quantity is a finite-size
@@ -133,18 +139,34 @@ independent `Beta(1,K-1)` variables, with `K=4`. FFT convolution in `-ln(s)`
 computes the density on a fixed 65,536-point grid spanning `s=1e-20` to `1`.
 The standardization uses the exact log moments of the Beta product.
 
-Empirical panels use the same **925-tree cohort** as Figure 2b. At each level,
-positive size fractions are histogrammed in log space, and the mean and
-population SD of `ln(s)` define the standardized variable. Six bins per level
-follow the within-corpus plotting convention in the source notebook. The
-standard normal is a comparison curve, not a fitted curve. Full numerical
-settings and level counts are saved in `results/figure5abcd.json`.
+Empirical panels use the same **925-tree cohort** as Figure 2b and follow
+cells 9 and 4 of `code/tree_universal.ipynb`, respectively. Panel (c) uses
+**six equally spaced bins in the size fraction `s`**, density normalization,
+and arithmetic bin centers on log-log axes. Panel (d) separately standardizes
+`ln(s)` using its measured mean and population SD, then uses six equal-width
+bins in that standardized coordinate. The normal reference is not fitted.
+
+As in the notebook's `tree_analysis` / `collect_level_data`, Figure 5 divides
+node sizes by the **saved token count** and excludes the deepest level of each
+tree. This differs from Figure 2's partition-mass normalization only for the
+retained partial-coverage story `100426` (1,426 saved tokens; partition mass
+1,102). Full bin edges, arithmetic centers, densities, normalization and level
+counts are saved in `results/figure5abcd.json`.
+
+`python reproduce.py --figure 5` also exports the two 6 x 4 inch panels:
+
+- [`figure5c_density_925.pdf`](figures/figure5c_density_925.pdf)
+- [`figure5d_collapse_925.pdf`](figures/figure5d_collapse_925.pdf)
+
+The original notebook's plotting cells are included in the portable
+[`notebooks/tree_universal_925.ipynb`](notebooks/tree_universal_925.ipynb), with
+its directory-based loading replaced by the bundled 925-tree archive.
 
 ## Files and datasets
 
 | File or directory | Purpose |
 |---|---|
-| [`reproduce.py`](reproduce.py) | Entry point for all four displayed figure files |
+| [`reproduce.py`](reproduce.py) | Entry point for composite figures and standalone replacement panels |
 | [`analysis/common.py`](analysis/common.py) | Archive reader, tree-size traversal, level pooling, entropy scores and binning |
 | [`analysis/rtm.py`](analysis/rtm.py) | Entropy recurrence, weak-composition simulation, Beta-product density |
 | [`analysis/figure1.py`](analysis/figure1.py), [`figure2.py`](analysis/figure2.py), [`figure3.py`](analysis/figure3.py), [`figure5.py`](analysis/figure5.py) | Figure-specific input selection and plotting |
@@ -152,7 +174,7 @@ settings and level counts are saved in `results/figure5abcd.json`.
 | [`data/tree_manifest.json`](data/tree_manifest.json) | Every story ID, archive member, SHA-256, saved-token count, partition mass and leaf counts |
 | [`data/source_manifest_925.json`](data/source_manifest_925.json) | Original source-run metadata for the 925 trees |
 | [`data/llm_entropy_reddit925.json.gz`](data/llm_entropy_reddit925.json.gz) | Cumulative surprisal arrays matched to the 925 tree IDs |
-| [`data/llm_entropy_reddit1000.json.gz`](data/llm_entropy_reddit1000.json.gz) | Full 1,000-story cumulative-surprisal cache used by Figure 1a |
+| [`data/llm_entropy_reddit1000.json.gz`](data/llm_entropy_reddit1000.json.gz) | Full 1,000-story source cache, retained for provenance and subset validation |
 | [`data/windows_nb100.json`](data/windows_nb100.json) | Fixed per-level histogram windows used for Figure 2b |
 | [`data/provenance.json`](data/provenance.json) | Source repositories, commits and hashes of copied inputs |
 | [`theory/theory_dist_k=4.json`](theory/theory_dist_k=4.json) | Saved finite-`N` RTM distributions |
@@ -183,8 +205,8 @@ cohort**, with **618,417 tokens of partition mass**. No completion or new
 chunking is applied during figure reproduction.
 
 One retained record, story `100426`, has partition mass 1,102 and 1,426 saved
-tokens. The original partition is preserved, and tree-based normalization uses
-1,102. The matching LLM cache uses its own sequence length; scoring text and
+tokens. The original partition is preserved, and Figures 2-3 use partition mass
+1,102; Figure 5 follows the notebook and uses the saved-token count 1,426. The matching LLM cache uses its own sequence length; scoring text and
 tree text are not assumed to be byte-identical. These conventions are checked
 and recorded by `validate.py`.
 
@@ -205,8 +227,8 @@ python src/recompute_theory.py --k 4 --N 2500 --lmin 2 --lmax 11 --out theory/re
 
 The implementation forms dense matrices; `N=2500` needs several hundred MB of
 working memory. Small-`N` comparison against the original reference utilities
-is included in the numerical checks. The entropy recurrence used by Figures
-1b and 3a is separate and uses only linear memory.
+is included in the numerical checks. The entropy recurrence used by Figure
+1b is separate and uses only linear memory.
 The full `N=2500`, `K=4`, level 2–11 cache was also regenerated and matched the
 supplied final-length distributions exactly in the reference environment.
 

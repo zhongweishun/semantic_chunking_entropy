@@ -2,32 +2,62 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-from matplotlib.colors import Normalize
+from matplotlib.colors import Normalize, ListedColormap
 from .common import ROOT, REFERENCE_RATE, read_json, save, write_json
 from .rtm import expected_entropy
 
 
-def make(out, results):
-    cache = read_json(ROOT/'data/llm_entropy_reddit1000.json.gz')
+def cumulative_fit(cache):
+    """Pooled OLS with a free intercept and one-based token positions."""
     curves = [np.asarray(v['TI_cumulative_token']) for v in cache.values()]
-    x = np.concatenate([np.arange(len(y)) for y in curves])
+    x = np.concatenate([np.arange(1, len(y)+1) for y in curves])
     y = np.concatenate(curves)
     slope, intercept = np.polyfit(x, y, 1)
     r2 = 1-np.sum((y-(slope*x+intercept))**2)/np.sum((y-y.mean())**2)
+    return {'llm_stories':len(curves), 'pooled_token_observations':len(x),
+            'token_index_start':1, 'slope':float(slope), 'intercept':float(intercept),
+            'r_squared':float(r2)}
+
+
+def plot_cumulative_info_token(cache, ax, fit, theory_slope=REFERENCE_RATE):
+    """Adapt the supplied plotting function without changing its pooled fit."""
+    curves = [np.asarray(v['TI_cumulative_token']) for v in cache.values()]
+    lengths = np.array([len(y) for y in curves])
+    order = np.argsort(lengths)
+    colors = sns.color_palette('mako', n_colors=len(curves))
+    cmap = ListedColormap(colors)
+    norm = Normalize(0, lengths.max())
+    for plot_idx, story_idx in enumerate(order):
+        values = curves[story_idx]
+        ax.plot(np.arange(1, values.size+1), values, color=colors[plot_idx], lw=1.5)
+    xx = np.array([1, lengths.max()])
+    ax.plot(xx,fit['slope']*xx+fit['intercept'],'b-.',lw=2,
+            label=f"$h={fit['slope']:.3f}$\n$R^2={fit['r_squared']:.3f}$")
+    ax.plot(xx,theory_slope*xx+fit['intercept'],'r--',lw=2,
+            label='Theory '+r'$(K=4)$')
+    ax.set(xlabel='Token Number',ylabel='Cumulative surprisal (nats)')
+    ax.legend(fontsize=.6*plt.rcParams['font.size'],markerscale=.6,
+              labelspacing=.6,handlelength=1.,handletextpad=.4,borderpad=.5,
+              borderaxespad=.5,loc='upper left')
+    ax.figure.colorbar(plt.cm.ScalarMappable(norm=norm,cmap=cmap),ax=ax,
+                      label=r'Story Length $(N)$',ticks=np.arange(0,lengths.max()+1,500))
+
+
+def make(out, results):
+    cache = read_json(ROOT/'data/llm_entropy_reddit925.json.gz')
+    manifest_ids = {r['story_id'] for r in read_json(ROOT/'data/tree_manifest.json')}
+    if len(cache)!=925 or set(cache)!=manifest_ids:
+        raise ValueError('Figure 1a requires the exact 925-tree paired score cohort')
+    fit = cumulative_fit(cache)
+    fig, ax = plt.subplots(figsize=(6,4))
+    plot_cumulative_info_token(cache,ax,fit)
+    ax.set_ylabel('Cumulative surprisal\n(nats)')
+    fig.tight_layout()
+    save(fig,out,'figure1a_entropy_925')
+
     fig, axes = plt.subplots(1, 3, figsize=(18, 4.8),
                              gridspec_kw={'width_ratios':[1.15,1,1.35]})
-    ax = axes[0]
-    norm = Normalize(0, 2500)
-    cmap = sns.color_palette('mako', as_cmap=True)
-    for values in sorted(curves, key=len):
-        ax.plot(np.arange(values.size), values, color=cmap(norm(values.size)), lw=1.5)
-    xx = np.array([0,max(map(len,curves))-1])
-    ax.plot(xx,slope*xx+intercept,'b-.',lw=2,label=f'$h={slope:.3f}$\n$R^2={r2:.3f}$')
-    ax.plot(xx,REFERENCE_RATE*xx+intercept,'r--',lw=2,label='Theory '+r'$(K=4)$')
-    ax.set(xlabel='Token Number',ylabel='Cumulative surprisal (nats)')
-    ax.legend(fontsize=12,loc='upper left',handlelength=1.,handletextpad=.4)
-    fig.colorbar(plt.cm.ScalarMappable(norm=norm,cmap=cmap),ax=ax,
-                 label=r'Text Length $(N)$',ticks=np.arange(0,2501,500))
+    plot_cumulative_info_token(cache,axes[0],fit)
     ks = np.arange(2, 10)
     finite_n = 5000
     rates = [expected_entropy(int(k),finite_n)[-1]/finite_n for k in ks]
@@ -67,4 +97,7 @@ def make(out, results):
                 transform=ax.transAxes,fontsize=24,va='bottom')
     fig.tight_layout(w_pad=1.2)
     save(fig,out,'figure1_entropy')
-    write_json(results/'figure1.json',{'llm_stories':len(curves),'pooled_token_observations':len(x),'slope':slope,'intercept':intercept,'r_squared':r2,'reference_rate':REFERENCE_RATE,'rtm_finite_N':finite_n,'rtm_K':ks.tolist(),'rtm_H_over_N':rates})
+    write_json(results/'figure1.json',dict(fit,
+        score_cache='data/llm_entropy_reddit925.json.gz',
+        story_ids=sorted(cache), reference_rate=REFERENCE_RATE,
+        rtm_finite_N=finite_n,rtm_K=ks.tolist(),rtm_H_over_N=rates))

@@ -10,7 +10,9 @@ For a story with cumulative information array `TI`, its rate is the slope of
 ordinary least squares on `arange(len(TI))`. Figure 3 takes the mean and
 population standard deviation of these per-story slopes over the 925 paired
 IDs. Figure 1a instead fits all token-index/information observations pooled
-over the full 1,000-story cache. No intercept is forced to zero.
+over the same 925 paired IDs, using one-based token positions as in the
+supplied plotting function. No intercept is forced to zero. Shifting token
+indices from zero to one changes only the intercept, not the slope or R².
 
 ## Tree score and terminal nodes
 
@@ -91,12 +93,18 @@ The transformed density is `sigma_L * g_L` versus
 `(ln(s)-mu_L)/sigma_L`. Tests compare the two-factor FFT density against an
 independent Mellin-convolution integral at four size fractions.
 
-For the 925-tree empirical panels, discard zero size fractions, take log
-sizes, and estimate each level's mean and population SD. Histograms use six
-bins per level, with edges spanning the observed log-size or standardized
-range. In the log-size density panel, divide the density in `ln(s)` by `s`
-at the geometric bin centers. The normal reference is not fitted to the
-histogram. These transformations preserve the specified empirical cohort.
+For the 925-tree empirical panels, use the notebook's saved-token count
+`N=len(tokens)` to form `s=n/N`, excluding each tree's deepest level. This
+normalization differs from the Figure 2 script only for the known partial
+record `100426`. Discard zero size fractions before computing log moments.
+
+Figure 5c follows notebook cell 9: use six equally spaced bins from minimum
+to maximum **s**, `np.histogram(..., density=True)`, and the **arithmetic** bin
+centers. Plot nonzero density values on log-log axes; the axes do not change
+the binning coordinate. Figure 5d follows notebook cell 4: standardize `ln(s)`
+using its empirical mean and population SD, then histogram that standardized
+variable using six equal-width bins spanning its observed range. These are
+two separate histogram calculations. The normal reference is not fitted.
 
 ## Validation
 

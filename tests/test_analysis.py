@@ -10,6 +10,29 @@ from analysis.rtm import expected_entropy, weak_composition, scaling_densities
 
 
 class AnalysisTests(unittest.TestCase):
+    def test_universal_notebook_normalization(self):
+        from analysis.figure5 import notebook_samples
+        trees=[('partial',{'partition':[[1,2],0,[1,1]],'tokens':list(range(10))})]
+        pooled=notebook_samples(trees)
+        np.testing.assert_allclose(pooled[2],[.3,0,.2])
+        self.assertEqual(len(pooled[3]),0)
+
+    def test_universal_size_bins_are_linear(self):
+        from analysis.figure5 import empirical_histograms
+        h=empirical_histograms([0,.01,.1,.4,.6,1])
+        np.testing.assert_allclose(h['size_bin_edges'],[.01,.175,.34,.505,.67,.835,1])
+        np.testing.assert_allclose(np.asarray(h['size_density'])*.165,[.4,0,.2,.2,0,.2])
+        np.testing.assert_allclose(h['size_bin_centers'],[.0925,.2575,.4225,.5875,.7525,.9175])
+
+    def test_pooled_fit_uses_one_based_token_positions(self):
+        from analysis.figure1 import cumulative_fit
+        fit=cumulative_fit({'a':{'TI_cumulative_token':[7,9]},
+                            'b':{'TI_cumulative_token':[7,9,11,13]}})
+        self.assertEqual(fit['pooled_token_observations'],6)
+        self.assertAlmostEqual(fit['slope'],2)
+        self.assertAlmostEqual(fit['intercept'],5)
+        self.assertAlmostEqual(fit['r_squared'],1)
+
     def test_terminal_leaves_and_levels(self):
         tree=[[1,2],0,[1,1]]
         self.assertEqual(sizes_by_level(tree),{3:[1,2,1,1],2:[3,0,2],1:[5]})

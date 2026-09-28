@@ -45,20 +45,32 @@ def validate(check_results=False):
     for story_id,record in all_scores.items():
         ti=np.asarray(record['TI_cumulative_token'])
         assert ti.ndim==1 and len(ti)>1 and np.all(np.isfinite(ti)),story_id
-    report={'tree_count':len(seen),'paired_score_count':len(paired),'figure1_score_count':len(all_scores),
+    report={'tree_count':len(seen),'paired_score_count':len(paired),'figure1_score_count':len(paired),
             'partition_tokens':total_tokens,'multitoken_leaves':multitoken,'coverage_mismatches':mismatches,
             'all_source_hashes_verified':True,'all_member_hashes_verified':True,'paired_scores_identical_to_full_cache':True}
     if check_results:
         a=read_json(ROOT/'results/figure1.json');b=read_json(ROOT/'results/figure2b.json');c=read_json(ROOT/'results/figure3.json')
-        assert abs(a['slope']-2.546096409)<1e-7
-        assert abs(a['r_squared']-.9717736929444166)<1e-10
+        assert a['llm_stories']==925 and set(a['story_ids'])==seen
+        assert a['token_index_start']==1 and a['pooled_token_observations']==629230
+        assert abs(a['slope']-2.556035866156032)<1e-10
+        assert abs(a['intercept']-112.5140459097235)<1e-8
+        assert abs(a['r_squared']-.9725456424708434)<1e-10
         assert abs(b['mean_KL_L2_9']-.0501)<5e-5
         assert abs(c['LLM_mean']-2.820087466460249)<1e-10
         assert abs(c['LLM_std']-.405062677554728)<1e-10
         assert abs(c['tree_mean']-2.692)<.0005
         assert abs(c['tree_std']-.192)<.0005
         assert abs(c['correlation']-.270)<.0005
-        for stem in ['figure1_entropy','figure2b_chunk_sizes','figure3_typicality','figure5abcd_scaling']:
+        universal=read_json(ROOT/'results/figure5abcd.json')
+        assert universal['trees']==925 and universal['empirical_size_binning']=='uniform in s'
+        assert universal['normalization']=='n / len(saved tokens)'
+        for level in universal['levels']:
+            edges=np.asarray(level['size_bin_edges']);density=np.asarray(level['size_density'])
+            np.testing.assert_allclose(np.diff(edges),np.diff(edges)[0],rtol=1e-12)
+            assert abs(np.dot(density,np.diff(edges))-1)<1e-12
+            assert abs(np.dot(level['standardized_density'],np.diff(level['standardized_bin_edges']))-1)<1e-12
+        for stem in ['figure1_entropy','figure1a_entropy_925','figure2b_chunk_sizes','figure3_typicality',
+                     'figure5abcd_scaling','figure5c_density_925','figure5d_collapse_925']:
             assert (ROOT/'figures'/f'{stem}.png').stat().st_size>10000
             assert (ROOT/'figures'/f'{stem}.pdf').stat().st_size>5000
         report['numerical_reference_checks_passed']=True

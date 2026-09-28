@@ -1,7 +1,7 @@
 {
   "tree_count": 925,
   "paired_score_count": 925,
-  "figure1_score_count": 1000,
+  "figure1_score_count": 925,
   "partition_tokens": 618417,
   "multitoken_leaves": 95765,
   "coverage_mismatches": [

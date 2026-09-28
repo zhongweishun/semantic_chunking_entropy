@@ -16,7 +16,7 @@ The correlations repository source version is
 |---|---|---|
 | `analysis/figure2.py` | `reddit1000/make_chunksize_figure.py --clean` | 15 × 12 inch grid; 10 pt empirical markers; 5 pt red dashed theory; identical per-level y limits; dashed grids at alpha 0.3; no legend or KL annotations |
 | `analysis/figure3.py`, panels b–c | `reddit1000/make_entropy_figure.py` | Scatter area 50 pt², alpha 0.2, black LLM marker edges; 2.5 pt binned lines and 6 pt markers; 2 pt red dashed theory; 12 pt legends; y range 0–5.1 |
-| `analysis/figure1.py`, panel a | `compute_information_utilities_together_6May2026.py` and manuscript `Entropy_curve.pdf` | Mako color palette, 1.5 pt cumulative traces, 2 pt fit/reference lines, compact upper-left legend, text-length colorbar |
+| `analysis/figure1.py`, panel a | `compute_information_utilities_together_6May2026.py` and manuscript `Entropy_curve.pdf` | 925-story paired cache; one-based token positions; length-ranked Mako palette, 1.5 pt cumulative traces, 2 pt fit/reference lines, compact upper-left legend, text-length colorbar |
 | `analysis/figure5.py` | `tree_universal.ipynb`, `infinite_N_chunk_size_distribution_6Aug2026.ipynb` and manuscript `tree_universal.pdf` | Ten Blues colors sampled from 0.3 to 0.9; 3 pt level curves at alpha 0.8; 5 pt standardized empirical markers; 4 pt dashed normal reference; separate discrete colorbars for levels 2–11 |
 
 The composite figures use manuscript panel letters and labels. Figure 1
@@ -39,3 +39,7 @@ theory calculations and simulation seeds are specified in
 [Methods](METHODS.md) and the numerical output files. The finite-size
 expectation is implemented in `analysis/rtm.py`; Figure 3a displays the
 manuscript's simulation mean, quantile band and dashed theory reference.
+
+Figure 1a is also exported on a 6 x 4 inch canvas. Figure 5c and 5d have
+separate 6 x 4 inch exports following notebook cells 9 and 4. The density
+panel uses six linear bins in size fraction s, with arithmetic bin centers.
