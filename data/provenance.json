@@ -1,0 +1,78 @@
+{
+  "sources": {
+    "correlations": {
+      "repository": "https://github.com/zhongweishun/semantic_chunking_correlations",
+      "commit": "ca5cbeccba06fd800ef4040c9c95858a79f0fed3"
+    },
+    "semantic-chunking": {
+      "repository": "https://github.com/zhongweishun/semantic-chunking",
+      "branch": "main",
+      "commit": "bb457d81daba7f8afb6e0d247b970d92abf193ab"
+    },
+    "tree_universal.ipynb": {
+      "source": "local/code/tree_universal.ipynb",
+      "sha256": "d5515f9b7b2191979bfef15034eb8d2c09c0d190931a3d8b6d2eb823931edd7a"
+    },
+    "infinite_N_chunk_size_distribution_6Aug2026.ipynb": {
+      "source": "local/code/infinite_N_chunk_size_distribution_6Aug2026.ipynb",
+      "sha256": "a60e788eca13f6911889a4dc09943f446699e0d21049caf4fd3f0052fce324f2"
+    },
+    "Reddit_stories_entropy_scatter_6Aug2026.ipynb": {
+      "source": "local/code/Reddit_stories_entropy_scatter_6Aug2026.ipynb",
+      "sha256": "3c79f8b7505380777d24405b920c3ca3684a2a6b80cc53861a577679b546bf02"
+    },
+    "manuscript": {
+      "title": "Semantic Chunking and the Entropy of Natural Language",
+      "source": "manuscript_overleaf/main.tex",
+      "sha256": "5477ab18fa6c83a813e8baa327833a638ffadba287ec21218deb1711beda29d1"
+    }
+  },
+  "files": {
+    "data/trees_cut30.tar.gz": {
+      "sha256": "d379647b4fa2a8ea5dda514150dad8dcb4b39f13662b42c39b4f57a9f35fc67b",
+      "source": "semantic_chunking_correlations/reddit1000/data/trees_cut30.tar.gz",
+      "byte_preserved": true
+    },
+    "data/llm_entropy_reddit925.json.gz": {
+      "sha256": "a241d98357e03c2c5677d9e221750cf330a23a2edbfdc42724b167c2fdb50fca",
+      "source": "semantic_chunking_correlations/reddit1000/data/llm_entropy_reddit925.json.gz",
+      "byte_preserved": true
+    },
+    "data/windows_nb100.json": {
+      "sha256": "9a01c717309a6f452f6b07a33a7c3813250e98cdedc802809a12d15a73748c0a",
+      "source": "semantic_chunking_correlations/reddit1000/data/windows_nb100.json",
+      "byte_preserved": true
+    },
+    "data/source_manifest_925.json": {
+      "sha256": "218a866862f77b458a63bf49513b544cc17ccd362c35f0d0f7dcf6f5e9a8ca9b",
+      "source": "semantic_chunking_correlations/reddit1000/data/manifest.json",
+      "byte_preserved": true
+    },
+    "theory/theory_dist_k=4.json": {
+      "sha256": "ea717088809a68f954614f634be527abc5b14f344d9ec074de4c81b4c9332911",
+      "source": "semantic_chunking_correlations/theory/theory_dist_k=4.json",
+      "byte_preserved": true
+    },
+    "src/hierarchical_chunker_utilities_LlamaDS_25Nov2025.py": {
+      "sha256": "f32356828dc925b6f2c440463468708044a79464cd63b526795a53e622ab836a",
+      "source": "semantic_chunking_correlations/src/hierarchical_chunker_utilities_LlamaDS_25Nov2025.py",
+      "byte_preserved": true
+    },
+    "src/recompute_theory.py": {
+      "sha256": "e031af981be7b5812cea6d1fe0ae0a1054e5a6b7c6e7572b27328a8673a4c2fc",
+      "source": "semantic_chunking_correlations/src/recompute_theory.py",
+      "byte_preserved": true
+    },
+    "src/rtm_theory_utilities.py": {
+      "sha256": "35db43290e183fe22129f8a65daa4c10bdd031f8f9e93088ccf6ec3dcf3340db",
+      "source": "semantic_chunking_correlations/src/rtm_theory_utilities.py",
+      "byte_preserved": true
+    },
+    "data/llm_entropy_reddit1000.json.gz": {
+      "sha256": "cac9d24eccb289b641c42626d0d40be2b2c496239fd54c22d3fa7fbe7354019f",
+      "source": "local/code/reddit_stories_1000_6Aug2026.json",
+      "uncompressed_sha256": "b8ea7ba0032afac68eeac9a7b4cb79b1aaa686b8f1468112f82dd07f29513d6d",
+      "transformation": "gzip compression only"
+    }
+  }
+}

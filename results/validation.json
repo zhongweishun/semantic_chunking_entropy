@@ -1,0 +1,18 @@
+{
+  "tree_count": 925,
+  "paired_score_count": 925,
+  "figure1_score_count": 1000,
+  "partition_tokens": 618417,
+  "multitoken_leaves": 95765,
+  "coverage_mismatches": [
+    {
+      "story_id": "100426",
+      "partition_tokens": 1102,
+      "saved_tokens": 1426
+    }
+  ],
+  "all_source_hashes_verified": true,
+  "all_member_hashes_verified": true,
+  "paired_scores_identical_to_full_cache": true,
+  "numerical_reference_checks_passed": true
+}

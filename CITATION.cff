@@ -1,0 +1,21 @@
+cff-version: 1.2.0
+message: "Please cite the accompanying manuscript when using these data or analyses."
+title: "Semantic Chunking and the Entropy of Natural Language"
+type: software
+authors:
+  - family-names: Zhong
+    given-names: Weishun
+  - family-names: Sivan
+    given-names: Doron
+  - family-names: Can
+    given-names: Tankut
+  - family-names: Katkov
+    given-names: Mikhail
+  - family-names: Tsodyks
+    given-names: Misha
+repository-code: "https://github.com/zhongweishun/semantic_chunking_entropy"
+keywords:
+  - semantic chunking
+  - entropy
+  - random trees
+  - natural language
