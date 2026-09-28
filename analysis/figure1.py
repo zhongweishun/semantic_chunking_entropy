@@ -44,9 +44,9 @@ def plot_cumulative_info_token(cache, ax, fit, theory_slope=REFERENCE_RATE):
 
 
 def save_cumulative_panel(cache, fit, out):
-    """Standalone panel: 9% wider, original height, fonts reduced by 20%."""
+    """Standalone panel: original aspect ratio, fonts reduced by 20%."""
     with plt.rc_context({'font.size':16}):
-        fig, ax = plt.subplots(figsize=(6.54,4))
+        fig, ax = plt.subplots(figsize=(6,4))
         plot_cumulative_info_token(cache,ax,fit)
         ax.set_ylabel('Cumulative surprisal\n(nats)')
         fig.tight_layout()
