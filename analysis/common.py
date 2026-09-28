@@ -95,17 +95,23 @@ def binned(n, y, edges, minimum=5):
 
 
 def style():
+    """Original manuscript scripts: DejaVu Sans 20 pt and STIX mathematics."""
+    plt.rcdefaults()
     plt.rcParams.update({'font.family':'DejaVu Sans', 'mathtext.fontset':'stix',
-                         'font.size':11, 'axes.spines.top':False,
-                         'axes.spines.right':False, 'savefig.dpi':180,
+                         'font.size':20, 'savefig.dpi':130,
                          'pdf.fonttype':42, 'ps.fonttype':42})
 
 
-def save(fig, out, stem):
+def panel_label(ax, letter, x=-.28):
+    ax.text(x, 1.08, f'({letter})', transform=ax.transAxes,
+            fontsize=26, va='bottom', ha='left')
+
+
+def save(fig, out, stem, dpi=130):
     out = Path(out)
     out.mkdir(parents=True, exist_ok=True)
     for ext in ['png', 'pdf']:
-        fig.savefig(out/f'{stem}.{ext}', bbox_inches='tight')
+        fig.savefig(out/f'{stem}.{ext}', dpi=dpi)
     plt.close(fig)
 
 

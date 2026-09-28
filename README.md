@@ -47,7 +47,9 @@ python reproduce.py --figure 1 3 5 --out-dir figures --results-dir results
 
 ## Figures and reproduction commands
 
-These are regenerated scientific plots with portable layouts. Panel letters
+The plots use the manuscript's DejaVu Sans/STIX typography and the original
+plotting scripts' font sizes, line widths, markers and colors. See
+[plotting settings and source mapping](docs/PLOTTING_STYLE.md). Panel letters
 refer to the main manuscript. Stochastic model panels are regenerated with an
 explicit seed; the empirical panels use the bundled, fixed observations.
 
@@ -97,8 +99,8 @@ density and per-level KL, so the plotted statistics can be reused directly.
 
 Panel (a) generates **128 realizations per length** on 14 logarithmically spaced
 lengths from 10 to 10,000 tokens, using Python's `random.Random(20260928)`.
-It shows the mean and empirical 2.5%–97.5% quantiles, together with the exact
-finite-size expectation. The original plotting scripts' reference value
+It shows the mean and empirical 2.5%–97.5% quantiles. The original plotting
+scripts' reference value
 **2.507174205174 nats/token** is retained as the dashed line in the panels.
 
 For panels (b) and (c), each LLM rate is the regression slope of one story's

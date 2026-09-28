@@ -37,8 +37,8 @@ H(N) = ln Z_K(N) + K / Z_K(N) * sum[m=2..N-1] Z_(K-1)(N-m) H(m).
 `analysis/rtm.py` evaluates the convolution by repeated cumulative sums in
 `O(K*N)` time. Tests compare this implementation with the direct recurrence
 and the closed-form binary solution. Figure 1b shows `H(5000)/5000`; Figure 3a
-compares simulations to the finite-size expectation evaluated at each sampled
-length. The dashed value `2.507174205174` is retained from the original plotting
+shows the simulation mean and empirical 95% quantiles. The dashed value
+`2.507174205174` is retained from the original plotting
 scripts and is not used to fit, rescale or force agreement with simulations.
 
 ## Chunk-size histogram and KL
