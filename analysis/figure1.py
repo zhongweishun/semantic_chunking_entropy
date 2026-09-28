@@ -26,7 +26,7 @@ def plot_cumulative_info_token(cache, ax, fit, theory_slope=REFERENCE_RATE):
     order = np.argsort(lengths)
     colors = sns.color_palette('mako', n_colors=len(curves))
     cmap = ListedColormap(colors)
-    norm = Normalize(0, lengths.max())
+    norm = Normalize(0, 2500)
     for plot_idx, story_idx in enumerate(order):
         values = curves[story_idx]
         ax.plot(np.arange(1, values.size+1), values, color=colors[plot_idx], lw=1.5)
@@ -40,7 +40,7 @@ def plot_cumulative_info_token(cache, ax, fit, theory_slope=REFERENCE_RATE):
               labelspacing=.6,handlelength=1.,handletextpad=.4,borderpad=.5,
               borderaxespad=.5,loc='upper left')
     ax.figure.colorbar(plt.cm.ScalarMappable(norm=norm,cmap=cmap),ax=ax,
-                      label=r'Story Length $(N)$',ticks=np.arange(0,lengths.max()+1,500))
+                      label=r'Story Length $(N)$',ticks=np.arange(0,2501,500))
 
 
 def make(out, results):
