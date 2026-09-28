@@ -40,12 +40,12 @@ def plot_cumulative_info_token(cache, ax, fit, theory_slope=REFERENCE_RATE):
               labelspacing=.6,handlelength=1.,handletextpad=.4,borderpad=.5,
               borderaxespad=.5,loc='upper left')
     ax.figure.colorbar(plt.cm.ScalarMappable(norm=norm,cmap=cmap),ax=ax,
-                      label=r'Story Length $(N)$',ticks=np.arange(0,2501,500))
+                      label=r'Text Length $(N)$',ticks=np.arange(0,2501,500))
 
 
 def save_cumulative_panel(cache, fit, out):
-    """Standalone panel: original aspect ratio, fonts reduced by 20%."""
-    with plt.rc_context({'font.size':16}):
+    """Standalone panel: original aspect ratio, fonts reduced by 10%."""
+    with plt.rc_context({'font.size':18}):
         fig, ax = plt.subplots(figsize=(6,4))
         plot_cumulative_info_token(cache,ax,fit)
         ax.set_ylabel('Cumulative surprisal\n(nats)')
