@@ -43,17 +43,23 @@ def plot_cumulative_info_token(cache, ax, fit, theory_slope=REFERENCE_RATE):
                       label=r'Story Length $(N)$',ticks=np.arange(0,2501,500))
 
 
+def save_cumulative_panel(cache, fit, out):
+    """Standalone panel: 9% wider, original height, fonts reduced by 20%."""
+    with plt.rc_context({'font.size':16}):
+        fig, ax = plt.subplots(figsize=(6.54,4))
+        plot_cumulative_info_token(cache,ax,fit)
+        ax.set_ylabel('Cumulative surprisal\n(nats)')
+        fig.tight_layout()
+        save(fig,out,'figure1a_entropy_925')
+
+
 def make(out, results):
     cache = read_json(ROOT/'data/llm_entropy_reddit925.json.gz')
     manifest_ids = {r['story_id'] for r in read_json(ROOT/'data/tree_manifest.json')}
     if len(cache)!=925 or set(cache)!=manifest_ids:
         raise ValueError('Figure 1a requires the exact 925-tree paired score cohort')
     fit = cumulative_fit(cache)
-    fig, ax = plt.subplots(figsize=(6,4))
-    plot_cumulative_info_token(cache,ax,fit)
-    ax.set_ylabel('Cumulative surprisal\n(nats)')
-    fig.tight_layout()
-    save(fig,out,'figure1a_entropy_925')
+    save_cumulative_panel(cache,fit,out)
 
     fig, axes = plt.subplots(1, 3, figsize=(18, 4.8),
                              gridspec_kw={'width_ratios':[1.15,1,1.35]})

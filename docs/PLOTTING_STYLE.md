@@ -40,6 +40,8 @@ theory calculations and simulation seeds are specified in
 expectation is implemented in `analysis/rtm.py`; Figure 3a displays the
 manuscript's simulation mean, quantile band and dashed theory reference.
 
-Figure 1a is also exported on a 6 x 4 inch canvas. Figure 5c and 5d have
+Figure 1a is also exported on a 6.54 x 4 inch canvas (9% wider at the same
+height), with 16 pt axis/colorbar text and a 9.6 pt legend (20% smaller).
+Its colorbar spans 0 to 2500. Figure 5c and 5d have
 separate 6 x 4 inch exports following notebook cells 9 and 4. The density
 panel uses six linear bins in size fraction s, with arithmetic bin centers.
